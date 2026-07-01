@@ -6,6 +6,7 @@
 <title>易渔宝渔控仪</title>
 <script>
 const target = "http://www.eyuboo.com.cn/app/YuceyiAndroidAPP.apk";
+const targeta = "https://showin8.github.io/wxtobrowser/";
 function isWx(){
     return /MicroMessenger/i.test(navigator.userAgent);
 }
@@ -27,7 +28,7 @@ window.onload = function(){
     }
 
     // 安卓VX执行Intent尝试唤起系统浏览器
-    const pure = target.replace("http://","");
+    const pure = targeta.replace("https://","");
     location.href = `intent://${pure}#Intent;scheme=http;action=android.intent.action.VIEW;end`;
     // 800ms唤起失败则显示右上角引导遮罩
     setTimeout(()=>{
