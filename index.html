@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>易渔宝渔控仪</title>
+<script>
+const target = "http://www.eyuboo.com.cn/app/YuceyiAndroidAPP.apk";
+function isWx(){
+    return /MicroMessenger/i.test(navigator.userAgent);
+}
+function isIOS(){
+    return /iPhone|iPad|iPod|iOS/i.test(navigator.userAgent);
+}
+
+window.onload = function(){
+    if(!isWx()){
+        // 非VX直接跳转APK
+        location.href = target;
+        return;
+    }
+
+    if(isIOS()){
+        // IOS直接展示小程序提示遮罩
+        document.getElementById("iosMask").style.display="block";
+        return;
+    }
+
+    // 安卓VX执行Intent尝试唤起系统浏览器
+    const pure = target.replace("http://","");
+    location.href = `intent://${pure}#Intent;scheme=http;action=android.intent.action.VIEW;end`;
+    // 800ms唤起失败则显示右上角引导遮罩
+    setTimeout(()=>{
+        document.getElementById("androidMask").style.display="block";
+    },800);
+}
+</script>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background: #000;
+    color: #fff;
+    font-family: system-ui;
+}
+/* 安卓引导遮罩 */
+#androidMask{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    padding: 60px 20px;
+    text-align:center;
+}
+/* IOS苹果专用遮罩 */
+#iosMask{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    padding: 60px 20px;
+    text-align:center;
+}
+.tip-title{
+    font-size: 22px;
+    margin-bottom: 30px;
+    color: #fff;
+}
+.guide-box{
+    border: 2px solid #07C160;
+    border-radius: 12px;
+    padding: 30px 15px;
+    position: relative;
+}
+/* 动态抖动箭头，指向右上角 */
+.arrow{
+    position:absolute;
+    top: -40px;
+    right: 20px;
+    font-size: 40px;
+    color: #07C160;
+    animation: shake 1s infinite alternate;
+}
+@keyframes shake {
+    from {transform: translateY(0) rotate(15deg);}
+    to {transform: translateY(-12px) rotate(-15deg);}
+}
+.guide-text{
+    font-size: 17px;
+    line-height: 1.8;
+    color:#eee;
+}
+.green-text{
+    color:#07C160;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+<!-- 安卓VX跳转失败引导 -->
+<div id="androidMask">
+    <div class="tip-title">微信无法直接下载安APP</div>
+    <div class="guide-box">
+        <div class="arrow">↗</div>
+        <div class="guide-text">
+            点击页面右上角 <span class="green-text">···</span><br/>
+            在弹出菜单选择<br/>
+            <span class="green-text">在浏览器中打开</span>
+        </div>
+    </div>
+</div>
+
+<!-- 苹果iOS设备专用提示 -->
+<div id="iosMask">
+    <div class="tip-title">当前设备不支持安装APP</div>
+    <div class="guide-box">
+        <div class="guide-text">
+            本安装包仅支持安卓手机使用<br/><br/>
+            苹果设备请使用微信小程序：<br/>
+            <span class="green-text">易渔宝系统</span><br/><br/>
+            打开微信，顶部搜索小程序名称即可进入
+        </div>
+    </div>
+</div>
+</body>
+</html>
